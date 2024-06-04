@@ -25,7 +25,7 @@ class Client(discord.Client):
 		if mentions.__len__() > 1:
 			await message.reply("one at a time !")
 		else:
-			await message.reply(f"khrj t9wwd {mentions[0].mention} hh!")
+			# await message.reply(f"khrj t9wwd {mentions[0].mention} hh!")
 			return mentions[0]
 
 	async def on_ready(self):
@@ -49,22 +49,28 @@ class Client(discord.Client):
 				# the part were i kick ppl !
 				if message.content[1:6] == "kick ":
 
-					if message.author.voice == None:
-						if message.author.id == self.application.owner.id:
-							await message.reply("rah khask dkhole shi voice channel n3am as 👉👈 !")
-						else:
-							await message.reply("fin? dkhole ya zbi Lshi voice channel, so i can join in !")
-					else:
-						channel: Union[discord.VoiceChannel, discord.StageChannel] = message.author.voice.channel
-						voice: discord.VoiceProtocol = await channel.connect()
-						source = discord.FFmpegPCMAudio(source='kicking_audio.wav')
-						voice.play(source)
-						while voice.is_playing():
-							await sleep(.1)
-						await voice.disconnect()
-
 					user: discord.Member = await self.hbt_t9wwd(message)
-					await user.kick(reason="charlomanti hh")
+					if user.voice == None:
+						if message.author.id == self.application.owner.id:
+							await message.reply("rah khaso ikon Fshi voice channel n3am as 👉👈 !")
+						else:
+							await message.reply(f"fin? {user.mention} dkhole ya zbi Lshi voice channel, so i can join in !")
+					else:
+						if user.guild_permissions.administrator:
+							await message.reply("high privilege n3am as 👉👈 !")
+						else:
+							channel: Union[discord.VoiceChannel, discord.StageChannel] = message.author.voice.channel
+							voice: discord.VoiceProtocol = await channel.connect()
+							source = discord.FFmpegPCMAudio(source='kicking_audio.wav')
+							voice.play(source)
+							while voice.is_playing():
+								await sleep(.1)
+							await voice.disconnect()
+							await user.kick(reason="charlomanti hh")
+
+						if user not in message.guild.members:
+							message.channel.send("khrj t9wwd hhh")
+
 
 			except KeyError:
 				await message.reply("command not found !")
