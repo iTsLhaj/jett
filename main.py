@@ -1,6 +1,7 @@
 from rich.console import Console
 from rich.theme import Theme
 from typing import List, Union
+from asyncio import sleep
 
 import discord
 import dotenv
@@ -24,7 +25,7 @@ class Client(discord.Client):
 		if mentions.__len__() > 1:
 			await message.reply("one at a time !")
 		else:
-			await message.reply(f"7choma t kicki sa7bna {mentions[0].mention} https://cdn.discordapp.com/attachments/621099308694896660/1246235236807741470/RPReplay_Final1717117608.mov?ex=665ba682&is=665a5502&hm=8e585cd60512d795ba5ab3aa694442909c8ddb113df2187cf7b1e09ed7ec4f1e&")
+			await message.reply(f"khrj t9wwd {mentions[0].mention} hh!")
 			return mentions[0]
 
 	async def on_ready(self):
@@ -47,10 +48,6 @@ class Client(discord.Client):
 			try:
 				# the part were i kick ppl !
 				if message.content[1:6] == "kick ":
-					user: discord.Member = await self.hbt_t9wwd(message)
-					await user.kick(reason="charlomanti hh")
-
-				if message.content[1:4] == "aji":
 
 					if message.author.voice == None:
 						if message.author.id == self.application.owner.id:
@@ -60,11 +57,14 @@ class Client(discord.Client):
 					else:
 						channel: Union[discord.VoiceChannel, discord.StageChannel] = message.author.voice.channel
 						voice: discord.VoiceProtocol = await channel.connect()
-						discord.FFmpegAudio()
-						voice.play()
+						source = discord.FFmpegPCMAudio(source='kicking_audio.wav')
+						voice.play(source)
+						while voice.is_playing():
+							await sleep(.1)
+						await voice.disconnect()
 
-						# await voice.disconnect()
-
+					user: discord.Member = await self.hbt_t9wwd(message)
+					await user.kick(reason="charlomanti hh")
 
 			except KeyError:
 				await message.reply("command not found !")
